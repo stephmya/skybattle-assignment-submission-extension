@@ -6,7 +6,10 @@
     "permissions": ["activeTab"],
   "content_scripts": [
     {
-      "matches": ["*://classroom.google.com/*"],
+      "matches": [
+        "*://classroom.google.com/*",
+        "*://mylearning.suny.edu/*"
+      ],
       "js": ["content.js"]
     }
   ],
