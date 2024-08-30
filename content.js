@@ -1,3 +1,4 @@
+// Function to play sound with detailed error handling
 function playSound() {
     try {
         const audio = new Audio(chrome.runtime.getURL('sound.mp3'));
@@ -13,18 +14,16 @@ function playSound() {
     }
 }
 
-
+// Function to add text change listener to the button
 function addTextChangeListener(button) {
-    // console.log("Adding MutationObserver to the 'Turn in' button.");
     const textObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             const currentText = button.textContent.trim();
-            // console.log("Button text changed to:", JSON.stringify(currentText));
-            if (currentText.includes("Turning in", "Marking as done")) {
-                // console.log("Text is 'Turning in...', preparing to play sound.");
-                                document.body.addEventListener('click', function playSoundOnClick() {
+            // Check for text indicating submission process
+            if (currentText.includes("Submitting") || currentText.includes("Marking as done") || currentText.includes("Mark as Complete") || currentText.includes("Submit Quiz")) {
+                document.body.addEventListener('click', function playSoundOnClick() {
                     playSound();
-                    document.body.removeEventListener('click', playSoundOnClick); 
+                    document.body.removeEventListener('click', playSoundOnClick);
                 });
                 textObserver.disconnect();
             }
@@ -33,15 +32,34 @@ function addTextChangeListener(button) {
     textObserver.observe(button, { characterData: true, subtree: true, childList: true });
 }
 
+// Function to detect submission actions in Google Classroom
 function detectGoogleClassroomSubmission() {
-    // console.log("Content script loaded.");
     function checkForButton() {
         const buttons = document.querySelectorAll('div[role="button"]');
-        // console.log("Found buttons:", buttons);
         buttons.forEach(button => {
             const buttonText = button.textContent.trim();
-            // console.log("Button text content:", JSON.stringify(buttonText));
-            if (buttonText.includes("Turn in", "Mark as done") || buttonText.includes("Turning in", "Mark as done")) {
+            // Correct use of includes for multiple conditions
+            if (buttonText.includes("Turn in") || buttonText.includes("Mark as done") || buttonText.includes("Turning in")) {
+                addTextChangeListener(button);
+            }
+        });
+    }
+
+    // Observe DOM changes for dynamic content
+    const observer = new MutationObserver(checkForButton);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    checkForButton();
+}
+
+// Function to detect submission actions in Brightspace
+function detectBrightspaceSubmission() {
+    function checkForButton() {
+        const buttons = document.querySelectorAll('button, a'); // Target all buttons and anchor elements
+        buttons.forEach(button => {
+            const buttonText = button.textContent.trim().toLowerCase(); // Normalize text to lower case for comparison
+            // Check for general submission phrases and specific cases like "Submit Quiz"
+            if (buttonText.includes("submit") || buttonText.includes("mark as complete") || buttonText.includes("upload") || buttonText.includes("save") || buttonText.includes("turn in") || buttonText.includes("submit quiz")) {
                 addTextChangeListener(button);
             }
         });
@@ -56,7 +74,14 @@ function detectGoogleClassroomSubmission() {
 
 // Ensure the script runs after the page is fully loaded
 window.addEventListener('load', function() {
-    if (window.location.href.includes('classroom.google.com')) {
+    const url = window.location.href;
+    if (url.includes('classroom.google.com')) {
         detectGoogleClassroomSubmission();
+    } else if (url.includes('mylearning')) { // Adjust to match your Brightspace URL
+        detectBrightspaceSubmission();
     }
 });
+
+
+
+// poop
