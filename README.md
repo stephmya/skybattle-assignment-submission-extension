@@ -1,2 +1,2 @@
 # skybattle-assignment-submission-extension
-wahoo
+MCCI FREAKS.
