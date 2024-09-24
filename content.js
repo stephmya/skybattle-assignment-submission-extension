@@ -1,4 +1,3 @@
-// Function to play sound with detailed error handling
 function playSound() {
     try {
         const audio = new Audio(chrome.runtime.getURL('sound.mp3'));
@@ -14,13 +13,14 @@ function playSound() {
     }
 }
 
-// Function to add text change listener to the button
 function addTextChangeListener(button) {
+    // console.log("Adding MutationObserver to button:", button.textContent.trim());
     const textObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             const currentText = button.textContent.trim();
-            // Check for text indicating submission process
-            if (currentText.includes("Submitting") || currentText.includes("Marking as done") || currentText.includes("Mark as Complete") || currentText.includes("Submit Quiz")) {
+            // console.log("Button text changed to:", currentText);
+            if (currentText.includes("Turning in") || currentText.includes("Marking as done")) {
+                // console.log("Detected 'Turning in' or 'Marking as done' state, preparing to play sound.");
                 document.body.addEventListener('click', function playSoundOnClick() {
                     playSound();
                     document.body.removeEventListener('click', playSoundOnClick);
@@ -32,34 +32,12 @@ function addTextChangeListener(button) {
     textObserver.observe(button, { characterData: true, subtree: true, childList: true });
 }
 
-// Function to detect submission actions in Google Classroom
 function detectGoogleClassroomSubmission() {
     function checkForButton() {
         const buttons = document.querySelectorAll('div[role="button"]');
         buttons.forEach(button => {
             const buttonText = button.textContent.trim();
-            // Correct use of includes for multiple conditions
-            if (buttonText.includes("Turn in") || buttonText.includes("Mark as done") || buttonText.includes("Turning in")) {
-                addTextChangeListener(button);
-            }
-        });
-    }
-
-    // Observe DOM changes for dynamic content
-    const observer = new MutationObserver(checkForButton);
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    checkForButton();
-}
-
-// Function to detect submission actions in Brightspace
-function detectBrightspaceSubmission() {
-    function checkForButton() {
-        const buttons = document.querySelectorAll('button, a'); // Target all buttons and anchor elements
-        buttons.forEach(button => {
-            const buttonText = button.textContent.trim().toLowerCase(); // Normalize text to lower case for comparison
-            // Check for general submission phrases and specific cases like "Submit Quiz"
-            if (buttonText.includes("submit") || buttonText.includes("mark as complete") || buttonText.includes("upload") || buttonText.includes("save") || buttonText.includes("turn in") || buttonText.includes("submit quiz")) {
+            if (buttonText.includes("Turn in") || buttonText.includes("Mark as done") || buttonText.includes("Turning in") || buttonText.includes("Marking as done")) {
                 addTextChangeListener(button);
             }
         });
@@ -74,14 +52,54 @@ function detectBrightspaceSubmission() {
 
 // Ensure the script runs after the page is fully loaded
 window.addEventListener('load', function() {
-    const url = window.location.href;
-    if (url.includes('classroom.google.com')) {
+    if (window.location.href.includes('classroom.google.com')) {
         detectGoogleClassroomSubmission();
-    } else if (url.includes('mylearning')) { // Adjust to match your Brightspace URL
-        detectBrightspaceSubmission();
     }
 });
 
+function detectBrightspaceSubmission() {
+    console.log("Brightspace detection script loaded.");
 
+    // Function to detect submission buttons and log their presence
+    function logButtonPresence() {
+        // Select all possible buttons related to submission actions
+        const buttons = document.querySelectorAll('button, div[role="button"]');
+        console.log("Scanning for Brightspace submission buttons...");
 
-// poop
+        buttons.forEach(button => {
+            const buttonText = button.textContent.trim().toLowerCase();
+            
+            // Check if the button text is related to submission actions
+            if (buttonText.includes("submit") || 
+                buttonText.includes("mark as complete") || 
+                buttonText.includes("upload") || 
+                buttonText.includes("save") || 
+                buttonText.includes("turn in") || 
+                buttonText.includes("submit quiz") || 
+                buttonText.includes("post")) {
+                
+                // Log button presence
+                console.log("Brightspace submission button detected on the page:", buttonText);
+                addTextChangeListener(button); // Add the listener for any text changes
+            }
+        });
+    }
+
+    // Observe DOM changes to detect and log buttons as they are added to the page
+    const observer = new MutationObserver(() => {
+        console.log("DOM changed, checking for new Brightspace buttons...");
+        logButtonPresence();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Initial detection of buttons on page load
+    logButtonPresence();
+}
+
+// Ensure the script runs after the page is fully loaded
+window.addEventListener('load', function() {
+    if (window.location.href.includes('brightspace') || window.location.href.includes('d2l')) {
+        detectBrightspaceSubmission();
+    }
+});

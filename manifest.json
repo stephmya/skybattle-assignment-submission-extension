@@ -1,14 +1,16 @@
 {
-    "manifest_version": 3,
-    "name": "Sky Battle Assignment Submission Sound Player",
-    "version": "1.0",
-    "description": "Plays the Sky Battle kill sound when an assignment is submitted.",
-    "permissions": ["activeTab"],
+  "manifest_version": 3,
+  "name": "Sky Battle Assignment Submission Sound Player",
+  "version": "1.0",
+  "description": "Plays the Sky Battle kill sound when an assignment is submitted.",
+  "permissions": ["activeTab"],
   "content_scripts": [
     {
       "matches": [
-        "*://classroom.google.com/*",
-        "*://mylearning.suny.edu/*"
+        "*://classroom.google.com/*", 
+        "*://*.mylearning.edu/*",
+        "*://*.mylearning.edu/*",
+        "*://*.edu/d2l/*"
       ],
       "js": ["content.js"]
     }
