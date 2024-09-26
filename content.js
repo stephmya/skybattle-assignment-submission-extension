@@ -1,30 +1,30 @@
 function playSound() {
-    try {
-      const audioUrl = chrome.runtime.getURL("sound.mp3");
-      if (!audioUrl) {
-        throw new Error("Audio URL is invalid.");
-      }
-  
-      const audio = new Audio(audioUrl);
-      audio
-        .play()
-        .then(() => {
-          console.log("Sound played successfully.");
-        })
-        .catch((error) => {
-          console.error("Error playing sound:", error);
-          alert("Error playing sound: " + error.message); // Debugging alert to show errors
-        });
-    } catch (e) {
-      console.error("Error initializing audio:", e);
-      alert("Error initializing audio: " + e.message); // Debugging alert to show initialization errors
+  try {
+    const audioUrl = chrome.runtime.getURL("sound.mp3");
+    if (!audioUrl) {
+      throw new Error("Audio URL is invalid.");
     }
+
+    const audio = new Audio(audioUrl);
+    audio
+      .play()
+      .then(() => {
+        console.log("Sound played successfully.");
+      })
+      .catch((error) => {
+        console.error("Error playing sound:", error);
+        alert("Error playing sound: " + error.message); // Debugging alert to show errors
+      });
+  } catch (e) {
+    console.error("Error initializing audio:", e);
+    alert("Error initializing audio: " + e.message); // Debugging alert to show initialization errors
   }
-  
-  // Ensure the script runs after the page is fully loaded
-  window.addEventListener("load", function () {
-    detectSubmissionButtons();
-  });
+}
+
+// Ensure the script runs after the page is fully loaded
+window.addEventListener("load", function () {
+  detectSubmissionButtons();
+});
 
 function addClickListener(button) {
   button.addEventListener("click", () => {
@@ -48,6 +48,7 @@ function detectSubmissionButtons() {
       if (
         // brightspace/d2l buttons
         buttonText.includes("submit") ||
+        buttonText.includes("done") ||
         buttonText.includes("mark as complete") ||
         buttonText.includes("upload") ||
         buttonText.includes("save") ||
