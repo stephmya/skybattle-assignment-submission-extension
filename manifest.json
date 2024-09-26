@@ -7,9 +7,9 @@
   "content_scripts": [
     {
       "matches": [
-        "*://classroom.google.com/*", 
-       
-        "*://*.edu/d2l/*"
+        "*://classroom.google.com/*",
+        "*://*.edu/d2l/*",
+        "*://*.instructure.com/*"
       ],
       "js": ["content.js"]
     }
