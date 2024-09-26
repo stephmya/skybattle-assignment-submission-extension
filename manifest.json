@@ -4,6 +4,13 @@
   "version": "1.0",
   "description": "Plays the Sky Battle kill sound when an assignment is submitted.",
   "permissions": ["activeTab"],
+  "icons": {
+    "128": "coin.png"
+  },
+  "action": {
+    "default_icon": "coin.png"
+  },
+
   "content_scripts": [
     {
       "matches": [
