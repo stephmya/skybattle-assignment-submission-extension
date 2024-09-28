@@ -1,24 +1,7 @@
 function playSound() {
-  try {
-    const audioUrl = chrome.runtime.getURL("sound.mp3");
-    if (!audioUrl) {
-      throw new Error("Audio URL is invalid.");
-    }
-
-    const audio = new Audio(audioUrl);
-    audio
-      .play()
-      .then(() => {
-        console.log("Sound played successfully.");
-      })
-      .catch((error) => {
-        console.error("Error playing sound:", error);
-        alert("Error playing sound: " + error.message); // Debugging alert to show errors
-      });
-  } catch (e) {
-    console.error("Error initializing audio:", e);
-    alert("Error initializing audio: " + e.message); // Debugging alert to show initialization errors
-  }
+  const audioUrl = chrome.runtime.getURL("sound.mp3");
+  const audio = new Audio(audioUrl);
+  audio.play();
 }
 
 // Ensure the script runs after the page is fully loaded
@@ -33,13 +16,13 @@ function addClickListener(button) {
 }
 
 function detectSubmissionButtons() {
-  console.log("Submission detection script loaded.");
+  // console.log("Submission detection script loaded.");
 
   // Function to detect submission buttons and log their presence
   function logButtonPresence() {
     // Select all possible buttons related to submission actions
     const buttons = document.querySelectorAll('button, div[role="button"]');
-    console.log("Scanning for submission buttons...");
+    //  console.log("Scanning for submission buttons...");
 
     buttons.forEach((button) => {
       const buttonText = button.textContent.trim().toLowerCase();
@@ -66,7 +49,7 @@ function detectSubmissionButtons() {
         // Exclude "unsubmit" actions
         if (!buttonText.includes("unsubmit")) {
           // Log button presence
-          console.log("Submission button detected on the page:", buttonText);
+          // console.log("Submission button detected on the page:", buttonText);
           addClickListener(button); // Add the listener for any text changes
         }
       }

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Sky Battle Assignment Submission Sound Player",
+  "name": "MCCI Kill Sound LMS Extension",
   "version": "1.0",
-  "description": "Plays the Sky Battle kill sound when an assignment is submitted.",
+  "description": "Plays the MCCI kill sound when an assignment is submitted in Brightspace/D2L, Google Classroom, or Canvas.",
   "permissions": ["activeTab"],
   "icons": {
     "128": "coin.png"
