@@ -16,7 +16,8 @@
       "matches": [
         "*://classroom.google.com/*",
         "*://*.edu/d2l/*",
-        "*://*.instructure.com/*"
+        "*://*.instructure.com/*",
+        "*://*.brightspace.com/*"
       ],
       "js": ["content.js"]
     }
