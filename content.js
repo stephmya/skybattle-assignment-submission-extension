@@ -16,13 +16,10 @@ function addClickListener(button) {
 }
 
 function detectSubmissionButtons() {
-  // console.log("Submission detection script loaded.");
-
   // Function to detect submission buttons and log their presence
   function logButtonPresence() {
     // Select all possible buttons related to submission actions
     const buttons = document.querySelectorAll('button, div[role="button"]');
-    //  console.log("Scanning for submission buttons...");
 
     buttons.forEach((button) => {
       const buttonText = button.textContent.trim().toLowerCase();
@@ -49,7 +46,6 @@ function detectSubmissionButtons() {
         // Exclude "unsubmit" actions
         if (!buttonText.includes("unsubmit")) {
           // Log button presence
-          // console.log("Submission button detected on the page:", buttonText);
           addClickListener(button); // Add the listener for any text changes
         }
       }
