@@ -3,12 +3,7 @@
   "name": "MCCI Kill Sound LMS Extension",
   "version": "1.1",
   "description": "Plays the MCCI kill sound when an assignment is submitted in Brightspace/D2L, Google Classroom, or Canvas.",
-  "permissions": [
-    "activeTab",
-    "*://classroom.google.com/*",
-    "*://*/d2l/*",
-    "*://*.instructure.com/*"
-  ],
+  "permissions": ["activeTab"],
   "icons": {
     "128": "coin.png"
   },
